@@ -1,0 +1,59 @@
+From: Apollon Oikonomopoulos <apoikos@debian.org>
+Date: Wed, 17 Jul 2019 13:08:45 -0300
+Subject: Fix build with -fPIE
+
+Upstream's build system does not differentiate between the flags used for
+building shared libraries and those used for building shared libraries. As a
+result, it uses -fPIC everywhere, which is incompatible with -fPIE. To allow
+-fPIE to work for binaries, we must pass -fPIC to shared objects only and
+filter -fPIE and -pie out of CFLAGS and LDFLAGS when passed to shared
+libraries.
+Last-Update: 2016-06-24
+Forwarded: no
+---
+ usr/Makefile | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/usr/Makefile b/usr/Makefile
+index 9525dbe..b19abec 100644
+--- a/usr/Makefile
++++ b/usr/Makefile
+@@ -45,7 +45,7 @@ CFLAGS += -g -O0 -ggdb -rdynamic
+ else
+ CFLAGS += -g -O2 -fno-strict-aliasing
+ endif
+-CFLAGS += -Wall -Wstrict-prototypes -Werror -fPIC
++CFLAGS += -Wall -Wstrict-prototypes -Werror
+ CFLAGS += -DTGT_VERSION=\"$(VERSION)$(EXTRAVERSION)\"
+ CFLAGS += -DBSDIR=\"$(DESTDIR)$(libdir)/backing-store\"
+ 
+@@ -91,21 +91,24 @@ tgtimg: $(TGTIMG_OBJS)
+ 
+ -include $(TGTIMG_DEP)
+ 
++LIBCFLAGS=$(filter-out -fPIE -pie,$(CFLAGS))
++LIBLDFLAGS=$(filter-out -fPIE -pie,$(LDFLAGS))
++
+ %.o: %.c
+ 	$(CC) $(CPPFLAGS) -c $(CFLAGS) $*.c -o $*.o
+ 	@$(CC) -MM $(CFLAGS) -MF $*.d -MT $*.o $*.c
+ 
+ %.so: %.c
+-	$(CC) $(CPPFLAGS) -shared $(CFLAGS) $*.c -o $*.so
++	$(CC) $(CPPFLAGS) -shared -fPIC $(LIBCFLAGS) $*.c -o $*.so
+ 
+ bs_rbd.so: bs_rbd.c
+-	$(CC) $(CPPFLAGS) -shared $(CFLAGS) bs_rbd.c -o bs_rbd.so \
+-		-lrados -lrbd $(LDFLAGS)
++	$(CC) $(CPPFLAGS) -shared -fPIC $(LIBCFLAGS) bs_rbd.c -o bs_rbd.so \
++		-lrados -lrbd $(LIBLDFLAGS)
+ 
+ bs_glfs.so: bs_glfs.c
+ 	$(CC) $(CPPFLAGS) -I/usr/include/glusterfs/api \
+-		-shared $(CFLAGS) bs_glfs.c -o bs_glfs.so \
+-		-lgfapi $(LDFLAGS)
++		-shared -fPIC $(LIBCFLAGS) bs_glfs.c -o bs_glfs.so \
++		-lgfapi $(LIBLDFLAGS)
+ 
+ .PHONY: install
+ install: $(PROGRAMS) $(MODULES)

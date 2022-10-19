@@ -1,0 +1,48 @@
+From: Apollon Oikonomopoulos <apoikos@debian.org>
+Date: Wed, 17 Jul 2019 14:15:16 -0300
+Subject: Fix compilation with glusterfs >= 6
+
+GlusterFS 6 (API version 7.6) changed the signatures for some functions,
+by extending their signatures. This breaks tgt's build, so fix it by
+checking the GlusterFS API version and re-defining the affected
+functions.
+---
+ usr/Makefile  | 6 ++++++
+ usr/bs_glfs.c | 7 +++++++
+ 2 files changed, 13 insertions(+)
+
+diff --git a/usr/Makefile b/usr/Makefile
+index b19abec..2c2c82b 100644
+--- a/usr/Makefile
++++ b/usr/Makefile
+@@ -9,6 +9,12 @@ ifneq ($(shell test -n $(shell find /usr/include -name "timerfd.h" | head -n1) &
+ CFLAGS += -DUSE_TIMERFD
+ endif
+ 
++# Check if we are using a glusterfs API version >= 7.6 (i.e. glusterfs >= 6)
++PKG_CONFIG ?= pkg-config
++ifneq ($(shell $(PKG_CONFIG) --atleast-version=7.6 glusterfs-api && echo 1),)
++CFLAGS += -DHAVE_GFAPI_VER_7_6
++endif
++
+ TGTD_OBJS += $(addprefix iscsi/, conn.o param.o session.o \
+ 		iscsid.o target.o chap.o sha1.o md5.o transport.o iscsi_tcp.o \
+ 		isns.o)
+diff --git a/usr/bs_glfs.c b/usr/bs_glfs.c
+index 93984b4..001092a 100644
+--- a/usr/bs_glfs.c
++++ b/usr/bs_glfs.c
+@@ -45,6 +45,13 @@
+ 
+ #include "glfs.h"
+ 
++/* Forward-compatibility with glfs 7.6 API */
++#ifdef HAVE_GFAPI_VER_7_6
++# define glfs_pread(fd, buf, count, offset, flags) glfs_pread(fd, buf, count, offset, flags, NULL)
++# define glfs_pwrite(fd, buf, count, offset, flags) glfs_pwrite(fd, buf, count, offset, flags, NULL, NULL)
++# define glfs_fdatasync(fd) glfs_fdatasync(fd, NULL, NULL)
++#endif
++
+ struct active_glfs {
+ 	char *name;
+ 	glfs_t *fs;

@@ -1,0 +1,32 @@
+From: Apollon Oikonomopoulos <apoikos@debian.org>
+Date: Wed, 17 Jul 2019 13:08:45 -0300
+Subject: Do not build the HTML manpages
+
+Forwarded: no
+Last-Update: 2014-05-13
+---
+ doc/Makefile | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/doc/Makefile b/doc/Makefile
+index e937f5e..6885b35 100644
+--- a/doc/Makefile
++++ b/doc/Makefile
+@@ -18,7 +18,7 @@ XMLHTML = htmlpages/tgtd.8.html htmlpages/tgtadm.8.html \
+ 		htmlpages/targets.conf.5.html htmlpages/tgt-setup-lun.8.html
+ 
+ .PHONY:all
+-all: xmlman xmlhtml
++all: xmlman
+ 
+ .PHONY: install
+ install: $(MANPAGES) $(DOCS)
+@@ -27,8 +27,6 @@ install: $(MANPAGES) $(DOCS)
+ 	install -m 644 $(filter %.5,$(MANPAGES)) $(DESTDIR)$(mandir)/man5
+ 	install -d -m 755 $(DESTDIR)$(docdir)
+ 	install -m 644 $(DOCS) $(DESTDIR)$(docdir)
+-	install -d -m 755 $(DESTDIR)$(docdir)/html
+-	install -m 644 $(XMLHTML) $(DESTDIR)$(docdir)/html
+ 
+ .PHONY: clean
+ clean:

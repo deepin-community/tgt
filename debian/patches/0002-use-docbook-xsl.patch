@@ -1,0 +1,67 @@
+From: Apollon Oikonomopoulos <apoikos@debian.org>
+Date: Wed, 17 Jul 2019 13:08:45 -0300
+Subject: Use local docbook XSL sheets
+
+Forwared: no
+Last-Update: 2014-05-13
+---
+ doc/Makefile | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/doc/Makefile b/doc/Makefile
+index 4af9d54..e937f5e 100644
+--- a/doc/Makefile
++++ b/doc/Makefile
+@@ -36,40 +36,40 @@ clean:
+ 	-rm -f manpages htmlpages
+ 
+ manpages/tgtd.8: tgtd.8.xml
+-	-test -z "$(XSLTPROC)" || $(XSLTPROC) -o $@ http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
++	-test -z "$(XSLTPROC)" || $(XSLTPROC) -o $@ /usr/share/xml/docbook/stylesheet/docbook-xsl/manpages/docbook.xsl $<
+ 
+ htmlpages/tgtd.8.html: tgtd.8.xml
+-	-test -z "$(XSLTPROC)" || $(XSLTPROC) -o $@ http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl $<
++	-test -z "$(XSLTPROC)" || $(XSLTPROC) -o $@ /usr/share/xml/docbook/stylesheet/docbook-xsl/html/docbook.xsl $<
+ 
+ manpages/tgtadm.8: tgtadm.8.xml
+-	-test -z "$(XSLTPROC)" || $(XSLTPROC) -o $@ http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
++	-test -z "$(XSLTPROC)" || $(XSLTPROC) -o $@ /usr/share/xml/docbook/stylesheet/docbook-xsl/manpages/docbook.xsl $<
+ 
+ htmlpages/tgtadm.8.html: tgtadm.8.xml
+-	-test -z "$(XSLTPROC)" || $(XSLTPROC) -o $@ http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl $<
++	-test -z "$(XSLTPROC)" || $(XSLTPROC) -o $@ /usr/share/xml/docbook/stylesheet/docbook-xsl/html/docbook.xsl $<
+ 
+ manpages/tgt-admin.8: tgt-admin.8.xml
+-	-test -z "$(XSLTPROC)" || $(XSLTPROC) -o $@ http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
++	-test -z "$(XSLTPROC)" || $(XSLTPROC) -o $@ /usr/share/xml/docbook/stylesheet/docbook-xsl/manpages/docbook.xsl $<
+ 
+ htmlpages/tgt-admin.8.html: tgt-admin.8.xml
+-	-test -z "$(XSLTPROC)" || $(XSLTPROC) -o $@ http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl $<
++	-test -z "$(XSLTPROC)" || $(XSLTPROC) -o $@ /usr/share/xml/docbook/stylesheet/docbook-xsl/html/docbook.xsl $<
+ 
+ manpages/tgtimg.8: tgtimg.8.xml
+-	-test -z "$(XSLTPROC)" || $(XSLTPROC) -o $@ http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
++	-test -z "$(XSLTPROC)" || $(XSLTPROC) -o $@ /usr/share/xml/docbook/stylesheet/docbook-xsl/manpages/docbook.xsl $<
+ 
+ htmlpages/tgtimg.8.html: tgtimg.8.xml
+-	-test -z "$(XSLTPROC)" || $(XSLTPROC) -o $@ http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl $<
++	-test -z "$(XSLTPROC)" || $(XSLTPROC) -o $@ /usr/share/xml/docbook/stylesheet/docbook-xsl/html/docbook.xsl $<
+ 
+ manpages/targets.conf.5: targets.conf.5.xml
+-	-test -z "$(XSLTPROC)" || $(XSLTPROC) -o $@ http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
++	-test -z "$(XSLTPROC)" || $(XSLTPROC) -o $@ /usr/share/xml/docbook/stylesheet/docbook-xsl/manpages/docbook.xsl $<
+ 
+ htmlpages/targets.conf.5.html: targets.conf.5.xml
+-	-test -z "$(XSLTPROC)" || $(XSLTPROC) -o $@ http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl $<
++	-test -z "$(XSLTPROC)" || $(XSLTPROC) -o $@ /usr/share/xml/docbook/stylesheet/docbook-xsl/html/docbook.xsl $<
+ 
+ manpages/tgt-setup-lun.8: tgt-setup-lun.8.xml
+-	-test -z "$(XSLTPROC)" || $(XSLTPROC) -o $@ http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl $<
++	-test -z "$(XSLTPROC)" || $(XSLTPROC) -o $@ /usr/share/xml/docbook/stylesheet/docbook-xsl/manpages/docbook.xsl $<
+ 
+ htmlpages/tgt-setup-lun.8.html: tgt-setup-lun.8.xml
+-	-test -z "$(XSLTPROC)" || $(XSLTPROC) -o $@ http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl $<
++	-test -z "$(XSLTPROC)" || $(XSLTPROC) -o $@ /usr/share/xml/docbook/stylesheet/docbook-xsl/html/docbook.xsl $<
+ 
+ xmlman: $(XMLMAN)
+ 
