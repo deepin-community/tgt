@@ -1,0 +1,23 @@
+From: Apollon Oikonomopoulos <apoikos@debian.org>
+Date: Wed, 17 Jul 2019 13:08:45 -0300
+Subject: Search for eventfd.h in /usr/include/<triplet>
+
+Last-Update: 2016-01-19
+Forwarded: no (Debian-specific)
+---
+ usr/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/usr/Makefile b/usr/Makefile
+index a906fe3..9525dbe 100644
+--- a/usr/Makefile
++++ b/usr/Makefile
+@@ -25,7 +25,7 @@ ifneq ($(SD_NOTIFY),)
+ CFLAGS += -DUSE_SYSTEMD
+ endif
+ 
+-ifneq ($(shell test -e /usr/include/sys/eventfd.h && test -e /usr/include/libaio.h && echo 1),)
++ifneq ($(shell test -e /usr/include/$(DEB_HOST_MULTIARCH)/sys/eventfd.h && test -e /usr/include/libaio.h && echo 1),)
+ CFLAGS += -DUSE_EVENTFD
+ TGTD_OBJS += bs_aio.o
+ LIBS += -laio

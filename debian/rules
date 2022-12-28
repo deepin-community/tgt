@@ -1,0 +1,32 @@
+#!/usr/bin/make -f
+#export DH_VERBOSE=1
+
+FEATURES = ISCSI_RDMA=1 CEPH_RBD=1 GLFS_BD=1 SD_NOTIFY=1
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+%:
+	dh $@ --with bash-completion
+
+override_dh_auto_build:
+	dh_auto_build -- $(FEATURES)
+
+override_dh_auto_install:
+	$(MAKE) $(FEATURES) DESTDIR=$(CURDIR)/debian/tgt install
+
+override_dh_installinit:
+	dh_installinit --no-stop-on-upgrade
+
+override_dh_installsystemd:
+	dh_installsystemd --no-stop-on-upgrade
+
+override_dh_install:
+	dh_install
+	rm -rf $(CURDIR)/debian/tgt/usr/lib
+
+override_dh_strip:
+	dh_strip --dbgsym-migration='tgt-dbg (<< 1:1.0.73-1~)'
+
+.PHONY: override_dh_auto_build override_dh_auto_install \
+	override_dh_installinit override_dh_install \
+	override_dh_strip override_dh_installsystemd

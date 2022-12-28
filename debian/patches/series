@@ -1,0 +1,8 @@
+0001-conf-makefile
+0002-use-docbook-xsl.patch
+0003-use-dpkg-buildflags.patch
+0004-do-not-build-html-manpages.patch
+0005-fix-aio-detection.patch
+0006-fix-pie-build
+0007-Fix-compilation-with-glusterfs-6.patch
+0008-Fix-example-config-path-in-manpages.patch

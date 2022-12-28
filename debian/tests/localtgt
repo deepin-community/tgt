@@ -1,0 +1,48 @@
+#!/bin/sh
+# Tests the creation and usage of a tgt target and lun on localhost
+set -uxe
+
+targetname="iqn.2016-11.foo.com:target.1.iscsi"
+cwd=$(pwd)
+testdir="/mnt/tgttest"
+portal="127.0.0.1:3260"
+
+# Restart tgtd to make sure modules are all loaded
+service tgt restart || echo "Failed to restart tgt" >&2
+
+# prep test file
+truncate --size 100M backingfile1
+# create target tid #1
+tgtadm --lld iscsi --op new --mode target --tid 1 -T "${targetname}"
+# allow all to bind the target
+tgtadm --lld iscsi --op bind --mode target --tid 1 -I ALL
+
+test_and_remove() {
+    # create lun on that backing file
+    # scan for targets (locally)
+    iscsiadm --mode discovery --type sendtargets --portal 127.0.0.1
+    # loginto the target we created
+    iscsiadm --mode node --targetname "${targetname}" --portal 127.0.0.1:3260 --login
+    # wait for udev to set all up + bonus
+    udevadm settle
+    sleep 3s
+    # mkfs/mount
+    mkfs.ext4 -F "/dev/disk/by-path/ip-${portal}-iscsi-${targetname}-lun-1"
+    mkdir -p ${testdir}
+    mount "/dev/disk/by-path/ip-${portal}-iscsi-${targetname}-lun-1" ${testdir}
+    cd ${testdir}
+    # test with read/write/verify
+    fio /usr/share/doc/fio/examples/surface-scan.fio
+    cd "${cwd}"
+    # also test disconnect/remove
+    umount ${testdir}
+    iscsiadm --mode node --targetname "${targetname}" --portal "${portal}" --logout
+    tgtadm --lld iscsi --op delete --mode logicalunit --tid 1 --lun 1
+}
+
+# test default rdwr backend
+tgtadm --lld iscsi --op new --mode logicalunit --tid 1 --lun 1 -b "${cwd}/backingfile1"
+test_and_remove
+# test aio backend
+tgtadm --lld iscsi --op new --mode logicalunit --tid 1 --lun 1 -b "${cwd}/backingfile1" -E aio
+test_and_remove
