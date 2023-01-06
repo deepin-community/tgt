@@ -1,3 +1,19 @@
+tgt (1:1.0.84-1) unstable; urgency=medium
+
+  * New upstream version 1.0.84:
+    646aa73 fix use-after-free in iser_conn_free() (Closes: #1013052)
+    9fd4a25 fix bug: target bound initiator-name but client cannot discovery
+            the target device
+    4c81b97 Remove clear non-existent directories: ibmvio, fc on "make clean"
+            command
+    7a2da00 Fix FMK and other flags
+  * d/watch: relax tarball matching expression
+  * Bump Standards-Version to 4.6.1; no changes needed
+  * d/control: point Homepage to Github
+  * Fix example location in manages (Closes: #979509)
+
+ -- Apollon Oikonomopoulos <apoikos@debian.org>  Mon, 26 Sep 2022 15:14:57 +0300
+
 tgt (1:1.0.80-1) unstable; urgency=medium
 
   * New upstream version 1.0.80
