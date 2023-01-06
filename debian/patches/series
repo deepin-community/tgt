@@ -5,3 +5,4 @@
 0005-fix-aio-detection.patch
 0006-fix-pie-build
 0007-Fix-compilation-with-glusterfs-6.patch
+0008-Fix-example-config-path-in-manpages.patch

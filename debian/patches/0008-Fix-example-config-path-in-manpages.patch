@@ -1,0 +1,36 @@
+From: Apollon Oikonomopoulos <apoikos@debian.org>
+Date: Mon, 26 Sep 2022 15:20:55 +0300
+Subject: Fix example config path in manpages
+
+Closes: #979509
+---
+ doc/targets.conf.5.xml | 2 +-
+ doc/tgt-admin.8.xml    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/doc/targets.conf.5.xml b/doc/targets.conf.5.xml
+index b606b83..12f3d86 100644
+--- a/doc/targets.conf.5.xml
++++ b/doc/targets.conf.5.xml
+@@ -436,7 +436,7 @@ Example configuration file:
+         </listitem>
+       </varlistentry>
+ 
+-      <varlistentry><term><option>/usr/share/doc/tgt/targets.conf.example</option></term>
++      <varlistentry><term><option>/usr/share/doc/tgt/examples/targets.conf.example</option></term>
+         <listitem>
+           <para>
+ 	    Example configuration file for tgt-admin.
+diff --git a/doc/tgt-admin.8.xml b/doc/tgt-admin.8.xml
+index d4bb006..884e7f3 100644
+--- a/doc/tgt-admin.8.xml
++++ b/doc/tgt-admin.8.xml
+@@ -223,7 +223,7 @@ Example usage:
+         </listitem>
+       </varlistentry>
+ 
+-      <varlistentry><term><option>/usr/share/doc/tgt/targets.conf.example</option></term>
++      <varlistentry><term><option>/usr/share/doc/tgt/examples/targets.conf.example</option></term>
+         <listitem>
+           <para>
+ 	    Example configuration file for tgt-admin.
